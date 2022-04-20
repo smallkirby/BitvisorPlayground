@@ -145,7 +145,7 @@ bios.bootDelay = "5000"
 2. Exec `loadvmm.efi`, which initializes BitVisor and backs to EFI shell:
 
 ```txt
-> fs0:
+> fs0: # maybe, FS0: (capital case)
 > cd ./efi/boot
 > .\loadvmm.efi
 ```
@@ -153,4 +153,34 @@ bios.bootDelay = "5000"
 ![](images/init-bitvisor.png)
 
 
-## TODO
+## Install guest OS (optional)
+
+Now, BitVisor is installed and system is virtualized. You can install guest OS. Ofcourse, you can continue just with installer iso image withoout actual instllation.
+
+1. Insert Ubuntu installer iso image and power on VM.
+2. Select `Install Ubuntu`. Create new partition right after `/dev/sda1` (EFI partition) and select it as installation point. At the same, choose `/dev/sda1` as GRUB bootloader installation point.
+
+![](images/ubuntu-installation.png)
+
+3. This installation would change the boot order of UEFI. Hence, reorder the boot order so that your disk drive gets the first priority.
+
+![](images/boot-order.png)
+
+
+## Check if BitVisor is working
+
+1. `dbgsh` is placed `/tools/dbgsh` in BitVisor repository directory. Build it. ***NOTE: static link is recommended***.
+
+```bash
+cd ./tools/dbgsh
+vim ./Makefile # add `--static` option
+make
+cp ./dbgsh ../../
+```
+
+2. Copy `dbgsh` binary in guest OS's filesystem in any way. (Mount it, or use `python3 http.server` module to `wget` the binary)
+3. Power on the VM, enter UEFI shell, exec `loadvmm.efi` to launch BitVisor.
+4. Exec `/ubuntu/shimx64.efi` to boot Ubuntu.
+5. Run `dbgsh` inside guest OS. Run `log` command. If BitVisor is working correctly, it would show BitVisor's debug log.
+
+![](images/dbgsh.png)

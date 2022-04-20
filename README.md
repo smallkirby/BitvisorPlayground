@@ -12,4 +12,4 @@ This repository describes how to start playing with BitVisor.
 
 - [Normal boot on bare-metal machine](normal-vmware.md)
 
-- [iPXE boot on VMWare](ipxe-baremetal.md) (practical)
+- [iPXE boot on bare-metal machine](ipxe-baremetal.md) (practical)
